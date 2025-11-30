@@ -86,6 +86,23 @@ def load_data(uploaded_file):
             return None
     return None
 
+@st.cache_data
+def load_default_data():
+    """Loads the default CSV file from the same directory."""
+    import os
+    default_path = os.path.join(os.path.dirname(__file__), 'processed_with_features.csv')
+    try:
+        df = pd.read_csv(default_path)
+        if 'created_utc' in df.columns:
+            df['created_utc'] = pd.to_datetime(df['created_utc'])
+        return df
+    except FileNotFoundError:
+        st.error(f"Default data file not found at: {default_path}")
+        return None
+    except Exception as e:
+        st.error(f"Error reading default file: {e}")
+        return None
+
 def generate_dummy_data():
     """Generates sample data for demonstration if no file is uploaded."""
     dates = pd.date_range(start="2025-01-01", periods=100)
@@ -386,7 +403,37 @@ def build_network_graph(df, mode, selected_domain=None, min_edge_weight=1):
 # --- Sidebar ---
 with st.sidebar:
     st.header("⚙️ Configuration")
-    gemini_key = st.text_input("Gemini API Key", type="password", help="Required for AI Insights and Chatbot")
+    
+    # Check for API key in secrets as fallback
+    default_gemini_key = ""
+    key_source = "None"
+    
+    try:
+        if "GEMINI_API_KEY" in st.secrets:
+            default_gemini_key = st.secrets["GEMINI_API_KEY"]
+            key_source = "Secrets"
+    except Exception:
+        pass
+    
+    # Don't show the actual key value in the input field
+    gemini_key_input = st.text_input(
+        "Gemini API Key", 
+        value="",
+        type="password", 
+        help="Required for AI Insights and Chatbot. Leave empty to use key from secrets.",
+        placeholder="Enter API key or leave empty to use secrets"
+    )
+    
+    # Determine which key to use
+    if gemini_key_input:
+        gemini_key = gemini_key_input
+        st.caption("✅ Using API key from: **User Input**")
+    elif default_gemini_key:
+        gemini_key = default_gemini_key
+        st.caption(f"✅ Using API key from: **{key_source}**")
+    else:
+        gemini_key = ""
+        st.caption("⚠️ No API key provided")
     
     st.divider()
     
@@ -408,15 +455,12 @@ embedder, sentiment_model, toxicity_pipe, emotion_pipe = load_nlp_models()
 # Load Data
 if uploaded_file:
     raw_df = load_data(uploaded_file)
-# elif use_sample:
-#     raw_df = generate_dummy_data()
-#     if 'sentiment' not in raw_df.columns:
-#         raw_df = compute_features(raw_df, sentiment_model, None, None)
-#         raw_df['toxicity'] = np.random.uniform(0, 0.1, len(raw_df))
-#         raw_df['emotion'] = np.random.choice(['neutral', 'anger', 'joy', 'surprise'], len(raw_df))
 else:
-    st.warning("Please upload a CSV file.")
-    st.stop()
+    st.info("No file uploaded. Using default dataset: `processed_with_features.csv`")
+    raw_df = load_default_data()
+    if raw_df is None:
+        st.error("Could not load default dataset. Please upload a CSV file.")
+        st.stop()
 
 # Ensure we have data
 if raw_df is not None:
