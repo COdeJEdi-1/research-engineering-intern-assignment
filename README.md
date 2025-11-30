@@ -17,8 +17,8 @@ The dashboard is built in **Streamlit**, uses several **NLP / ML models**, and i
 
 ## 🔗 Live Demo & Video
 
-- **Hosted App:** `[Insert your Streamlit URL here]`
-- **Demo Video (YouTube / Drive):** `[Insert your demo video link here]`
+- **Hosted App:** `https://reddit-analyis10.streamlit.app/`
+- **Demo Video (Drive):** `https://drive.google.com/file/d/1dbSiT_vcggoMXH2FjqzIls7_cihKnVQM/view?usp=sharing`
 
 ---
 
@@ -47,7 +47,7 @@ Optional precomputed columns (if present they’ll be used; if not, the app can 
 
 The interface has **four main tabs** plus a configuration sidebar.
 
-### 🔧 Sidebar: Configuration & Data
+###  Sidebar: Configuration & Data
 
 - **Gemini API Key** – used for:
   - Domain-level analytical reports
@@ -100,7 +100,7 @@ This is aimed at **non-technical audiences**.
 
 ---
 
-### 2. ⚔️ Comparison
+### 2.  Comparison
 
 This tab lets you compare **two domains side by side** (e.g. `www.youtube.com` vs `youtu.be`).
 
@@ -114,7 +114,7 @@ This tab lets you compare **two domains side by side** (e.g. `www.youtube.com` v
 
 ---
 
-### 3. 💬 AI Chatbot (RAG)
+### 3.  AI Chatbot (RAG)
 
 This tab lets you **chat with the dataset**.
 
@@ -138,7 +138,7 @@ This satisfies the rubric’s requirement for:
 
 ---
 
-### 4. 🔗 Network Explorer
+### 4. Network Explorer
 
 This tab builds **network graphs** to explore how communities and narratives connect.
 
@@ -208,7 +208,7 @@ This supports qualitative inspection of the narratives behind each structural pa
 
 ---
 
-## 🏗️ Design & Thought Process
+##  Design & Thought Process
 
 The system is structured to align with the SimPPL rubric:
 
@@ -235,7 +235,7 @@ The system is structured to align with the SimPPL rubric:
 ---
 
 
-## 📸 Screenshots
+##  Screenshots
 
 Below are key views of the platform demonstrating core functionality.
 
